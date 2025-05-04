@@ -1,0 +1,13 @@
+services:
+  database:
+    container_name: database
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data
+      - ./initdb/0001_schema.sql:/docker-entrypoint-initdb.d/0001_schema.sql  # for schema
+    environment:
+      - POSTGRES_DB=bookstoreDB
+      - POSTGRES_USER=tahsin
+      - POSTGRES_PASSWORD=password
