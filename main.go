@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+    "github.com/rs/cors"
     _"github.com/lib/pq"
 )
 
@@ -36,7 +37,7 @@ func main() {
         log.Fatal(err)
     }
     defer DB.Close()
-    
+
     r := mux.NewRouter()
 
     r.HandleFunc("/", homeHandler)
@@ -49,5 +50,16 @@ func main() {
     booksSubR.HandleFunc("/update/{isbn:[0-9]{13}}", UpdateHandler).Methods(http.MethodPut)
     booksSubR.HandleFunc("/delete/{isbn:[0-9]{13}}", DeleteHandler).Methods(http.MethodDelete)
 
-    log.Fatal(http.ListenAndServe(":8080", r))
+
+    c := cors.New(cors.Options{
+        AllowedOrigins:   []string{"http://localhost:5173"},
+        AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+        AllowedHeaders:   []string{"Content-Type"},
+        AllowCredentials: true,
+    })
+
+    fmt.Println("Server running on port 8080....")
+    handler := c.Handler(r)
+    log.Fatal(http.ListenAndServe(":8080", handler))
 }
+

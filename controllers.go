@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -68,6 +69,7 @@ func IsbnHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(b);
+	fmt.Println("HURRRAY")
 	if err != nil {
 		log.Println("Encoding error:", err)
 	}
